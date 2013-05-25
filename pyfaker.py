@@ -1,6 +1,6 @@
 import json
 import random
-from utils import Dotable, to_camel, format_
+from utils import to_camel, format_
 import re
 
 
@@ -15,7 +15,7 @@ with open('locales.json') as f:
 
 
 # Base class all classes inherit from this
-class Faker(object):
+class BaseFake(object):
     pass
 
 
@@ -62,10 +62,10 @@ def _faker_factory(_loc=None, _where=''):
                 assert(isinstance(_loc[kname], dict))
                 ty_dict = dict((k, _faker_factory(_loc=v, _where='%s.%s' % (_where, kname)))
                                for k, v in _loc[kname].items())
-                klasses[klassy_name] = type(klassy_name, (Faker,), ty_dict)
+                klasses[klassy_name] = type(klassy_name, (BaseFake,), ty_dict)
         return klasses
 
-Fake = Dotable(_faker_factory(_locale))
+Fake = type('Fake', (BaseFake,), _faker_factory(_locale))
 
 
 # Apparently the below is naughty, and I should be overwriting string.Formatter

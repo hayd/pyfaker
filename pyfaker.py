@@ -14,10 +14,10 @@ with open('locales.json') as f:
         _locale.update(Dotable(json.load(f)[lang_code]['faker']))
 
 
-
 # Base class all classes inherit from this
 class Faker(object):
     pass
+
 
 def _faker_factory(_loc=None, _where=''):
     if _loc is None:
@@ -27,9 +27,8 @@ def _faker_factory(_loc=None, _where=''):
         if all(isinstance(s, basestring) for s in _loc):
             # then method
             # TODO is the all above necessary? Maybe any would do?
-            # TODO format string, and #s
+
             # dict(dir(_where), **locals()) how to get it?
-            
             @classmethod
             def choice_(cls):
                 return format_(random.choice(_loc))
@@ -38,7 +37,6 @@ def _faker_factory(_loc=None, _where=''):
             # it's a class
             assert(not any(isinstance(s, basestring) for s in _loc))
             # fingers crossed
-
             if all(isinstance(s, list) for s in _loc):
                 # I'm assuming everything in each list is a string... why wouldn't it be?
                 # I'm just going to arbitrarily use space here
@@ -46,9 +44,8 @@ def _faker_factory(_loc=None, _where=''):
                 def choice_(cls):
                     return format_(' '.join(map(random.choice, L) for L in _loc))
                 return choice_
-            else: 
-                assert False
-
+            else:  # pragma: no cover
+                assert False  # let's hope not
 
     elif isinstance(_loc, dict):
         klass_names = _loc.keys()
@@ -56,14 +53,15 @@ def _faker_factory(_loc=None, _where=''):
         for kname in klass_names:
             if isinstance(_loc[kname], list):
                 # then possibly method
-                klasses[kname] = _faker_factory(_loc[kname], _where='%s.%s' % (_where, kname))
+                klasses[kname] = _faker_factory(_loc[
+                                                kname], _where='%s.%s' % (_where, kname))
             else:
                 # then dictionary and definitely a class
                 klassy_name = to_camel(kname)
                 # it jolly well ought to be a dict
                 assert(isinstance(_loc[kname], dict))
                 ty_dict = dict((k, _faker_factory(_loc=v, _where='%s.%s' % (_where, kname)))
-                                for k, v in _loc[kname].items())
+                               for k, v in _loc[kname].items())
                 klasses[klassy_name] = type(klassy_name, (Faker,), ty_dict)
         return klasses
 

@@ -3,7 +3,7 @@
 import yaml
 import hashlib
 import json
-from utils import unruby 
+from utils import unruby
 
 lang = 'en'
 

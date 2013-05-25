@@ -4,15 +4,11 @@ from utils import to_camel, format_
 import re
 
 
-lang_code = 'en'
-lang, sublang = lang_code.split() if '-' in lang_code else lang_code, None
+
 
 
 with open('locales.json') as f:
-    _locale = Dotable(json.load(f)[lang]['faker'])
-    if sublang:  # TODO check this is actually the way it's done
-        _locale.update(Dotable(json.load(f)[lang_code]['faker']))
-
+    _all_locales = json.load(f)
 
 # Base class all classes inherit from this
 class BaseFake(object):
@@ -29,7 +25,7 @@ def _faker_factory(_loc=None, _where=''):
             # TODO is the all above necessary? Maybe any would do?
 
             # dict(dir(_where), **locals()) how to get it?
-            @classmethod
+            # @classmethod
             def choice_(cls):
                 return format_(random.choice(_loc))
             return choice_
@@ -40,7 +36,7 @@ def _faker_factory(_loc=None, _where=''):
             if all(isinstance(s, list) for s in _loc):
                 # I'm assuming everything in each list is a string... why wouldn't it be?
                 # I'm just going to arbitrarily use space here
-                @classmethod
+                # @classmethod
                 def choice_(cls):
                     return format_(' '.join(map(random.choice, L) for L in _loc))
                 return choice_
@@ -65,7 +61,13 @@ def _faker_factory(_loc=None, _where=''):
                 klasses[klassy_name] = type(klassy_name, (BaseFake,), ty_dict)
         return klasses
 
-Fake = type('Fake', (BaseFake,), _faker_factory(_locale))
+def _init_fake(self, lang_code='en'):
+    lang, sublang = lang_code.split() if '-' in lang_code else lang_code, None
+    _locale = _all_locales[lang]['faker']
+    if sublang:  # TODO check this is actually the way it's done
+        _locale.update(json.load(f)[lang_code]['faker'])
+    self.__dict__.update(_faker_factory(_locale))
+Fake = type('Fake', (BaseFake,), {'__init__': _init_fake})
 
 
 # Apparently the below is naughty, and I should be overwriting string.Formatter

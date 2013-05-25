@@ -1,3 +1,3 @@
-__all__ = []
-
 from fake import Fake
+
+__all__ = ['Fake']

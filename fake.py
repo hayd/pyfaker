@@ -31,7 +31,7 @@ def _faker_factory(_loc=None, _where=''):
             # dict(dir(_where), **locals()) how to get it?
             @classmethod
             def choice_(cls):
-                return format_(random.choice(_loc))
+                return format_(random.choice(_loc), current=cls)
             return choice_
         else:
             # it's a class
@@ -42,7 +42,7 @@ def _faker_factory(_loc=None, _where=''):
                 # I'm just going to arbitrarily use space here
                 @classmethod
                 def choice_(cls):
-                    return format_(' '.join(map(random.choice, L) for L in _loc))
+                    return format_(' '.join(map(random.choice, L) for L in _loc), current=cls)
                 return choice_
             else:  # pragma: no cover
                 assert False  # let's hope not

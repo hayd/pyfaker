@@ -1,5 +1,13 @@
 import re
 import random
+from string import Formatter
+
+
+class CallFormatter(Formatter):
+    def get_field(self, field_name, *args, **kwargs):
+        cls = args[1]['cls']
+        obj, used_key = Formatter.get_field(self, field_name, args[0:1], kwargs)
+        return obj(cls), used_key
 
 
 def unruby(json_):
@@ -26,9 +34,11 @@ def to_camel(s):
             "%s doesn't convert to a good string for a class name" % kname)
 
 
-def format_(s, _locals=None):
+def format_(s, current, fake_=None):
+    namespace = dict(current.__dict__, **{'cls': current}) # and fake_ ?
     # first replace #s with digits then fill in rest using _locals
     def callback(matchobj):
         return '%s' % random.randrange(10)
     s = re.sub(r'#', callback, s)
-    return s
+    fmt = CallFormatter()
+    return fmt.format(s, **namespace)

@@ -11,7 +11,6 @@ all_methods = [('Lorem', 'supplemental'), ('Lorem', 'words')]
 def get_method(self, fake, where):
 	for i in where:
 		fake = fake.__dict__[i]
-
 	def method(self):
 		return fake
 	return method

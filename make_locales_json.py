@@ -3,6 +3,7 @@
 import yaml
 import hashlib
 import json
+from utils import unruby 
 
 lang = 'en'
 
@@ -11,12 +12,12 @@ lang = 'en'
 
 
 _locales = {}
-with open('%s.yml' % lang, 'r') as f:
+with open('locales/%s.yml' % lang, 'r') as f:
     f_yml = yaml.load(f)
     f_yml[lang]['_md5'] = hashlib.md5(f.read()).hexdigest()
     _locales.update(f_yml)
 
-# TODO replace all #{foo_bar.baz} with {Foo.bar}
+_locales = unruby(_locales)
 
 with open('locales.json', 'w') as f:
     json.dump(_locales, f)

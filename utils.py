@@ -17,6 +17,16 @@ class Dotable(dict):
     #   d = Dotable(d)
     #   super(Dotable, self).update(**d)
 
+def unruby(json_):
+    if isinstance(json_, basestring):
+        # TODO replace all #{foo_bar.baz} with {FooBar.baz}, may not be needed
+        return re.sub('#({[^}]*})', r'\1', json_)
+    if isinstance(json_, list):
+        return map(unruby, json_)
+    if isinstance(json_, dict):
+        return dict((k, unruby(v)) for k, v in json_.items())
+    return json_
+
 def to_camel(s):
     """returns string to camel caps
 

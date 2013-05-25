@@ -1,6 +1,7 @@
 import json
 import random
-from utils import Dotable
+from utils import Dotable, to_camel, format_
+import re
 
 
 lang_code = 'en'
@@ -18,7 +19,7 @@ with open('locales/locales.json') as f:
 class Faker(object):
     pass
 
-def _faker_factory(_loc=None):
+def _faker_factory(_loc=None, _where=''):
     if _loc is None:
         _loc = _locale
 
@@ -26,16 +27,19 @@ def _faker_factory(_loc=None):
         if all(isinstance(s, basestring) for s in _loc):
             # then method
             # TODO is the all above necessary? Maybe any would do?
-            # TODO format string
-            return lambda self: random.choice(_loc)
+            # TODO format string, and #s
+            # dict(dir(_where), **locals()) how to get it?
+            
+            return classmethod(lambda cls: format_(random.choice(_loc)))
         else:
             # it's a class
             assert(not any(isinstance(s, basestring) for s in _loc))
             # fingers crossed
 
             if all(isinstance(s, list) for s in _loc):
+                # I'm assuming everything in each list is a string... why wouldn't it be?
                 # I'm just going to arbitrarily use space here
-                return lambda self: ' '.join(map(random.choice, L) for L in _loc)
+                return classmethod(lambda cls: format_(' '.join(map(random.choice, L) for L in _loc)))
             else: 
                 assert False
 
@@ -46,24 +50,18 @@ def _faker_factory(_loc=None):
         for kname in klass_names:
             if isinstance(_loc[kname], list):
                 # then possibly method
-                klasses[kname] = _faker_factory(_loc[kname])
+                klasses[kname] = _faker_factory(_loc[kname], _where='%s.%s' % (_where, kname))
             else:
                 # then dictionary and definitely a class
-                print kname
-                try:
-                    klassy_name = kname.title().replace('_', '').encode('ascii')
-                except:
-                    raise ValueError("%s doesn't convert to a good string for a class name" % kname)
+                klassy_name = to_camel(kname)
                 # it jolly well ought to be a dict
                 assert(isinstance(_loc[kname], dict))
-                ty_dict = dict((k, _faker_factory(_loc=v))
+                ty_dict = dict((k, _faker_factory(_loc=v, _where='%s.%s' % (_where, kname)))
                                 for k, v in _loc[kname].items())
-                #d = dict(random_choice, **sub_classes)
-                # Note: set(_locale[name].keys()) != set(methods.keys())): this would save some effort if never raises
                 klasses[klassy_name] = type(klassy_name, (Faker,), ty_dict)
         return klasses
 
-a = _faker_factory(_locale)
+Fake = Dotable(_faker_factory(_locale))
 
 
 # Apparently the below is naughty, and I should be overwriting string.Formatter

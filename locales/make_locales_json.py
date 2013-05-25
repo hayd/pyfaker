@@ -16,13 +16,9 @@ with open('%s.yml' % lang, 'r') as f:
     f_yml[lang]['_md5'] = hashlib.md5(f.read()).hexdigest()
     _locales.update(f_yml)
 
+# TODO replace all #{foo_bar.baz} with {Foo.bar}
+
 with open('locales.json', 'w') as f:
     json.dump(_locales, f)
 
-
-
-
-# locales.en.faker.name => ['first_name', 'last_name', 'suffix', 'title', 'prefix', 'name']
-
-
-# The keys are the language "short" e.g. 'en'
+# The keys are the language lang_code e.g. 'en'

@@ -1,14 +1,18 @@
 import json
 import random
-from utils import to_camel, format_
+import os
 import re
+from utils import to_camel, format_
 
 
-
-
-
-with open('locales.json') as f:
-    _all_locales = json.load(f)
+def _get_locales():
+    def curpath():
+        pth, _ = os.path.split(os.path.abspath(__file__))
+        return pth
+    fpath = os.path.join(curpath(), 'locales.json')
+    with open(fpath, 'r') as f:
+        return json.load(f)
+_all_locales = _get_locales()
 
 # Base class all classes inherit from this
 class BaseFake(object):
@@ -25,7 +29,7 @@ def _faker_factory(_loc=None, _where=''):
             # TODO is the all above necessary? Maybe any would do?
 
             # dict(dir(_where), **locals()) how to get it?
-            # @classmethod
+            @classmethod
             def choice_(cls):
                 return format_(random.choice(_loc))
             return choice_
@@ -36,7 +40,7 @@ def _faker_factory(_loc=None, _where=''):
             if all(isinstance(s, list) for s in _loc):
                 # I'm assuming everything in each list is a string... why wouldn't it be?
                 # I'm just going to arbitrarily use space here
-                # @classmethod
+                @classmethod
                 def choice_(cls):
                     return format_(' '.join(map(random.choice, L) for L in _loc))
                 return choice_

@@ -1,1 +1,3 @@
-from pyfaker import Fake
+__all__ = []
+
+from fake import Fake

@@ -2,7 +2,7 @@ import yaml
 import hashlib
 import json
 import os
-from utils import unruby
+from pyfaker.utils import unruby
 
 lang = 'en'
 

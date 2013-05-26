@@ -1,6 +1,6 @@
 import random
 import re
-from utils import to_camel, format_, all_locales, BaseFake
+from pyfaker.utils import to_camel, format_, all_locales, BaseFake
 
 
 def _faker_factory(_loc=None, _where=''):

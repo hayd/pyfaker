@@ -1,6 +1,6 @@
 import random
 import re
-from utils import to_camel, get_locales, BaseFake, call_fmt
+from pyfaker.utils import to_camel, get_locales, BaseFake, call_fmt
 
 
 all_locales = get_locales()

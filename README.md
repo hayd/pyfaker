@@ -1,9 +1,7 @@
-A libary for generating pseudo-random (but "realistic") data in python, using existing language support of the Ruby faker gem.
+A python libary for generating pseudo-random (but "realistic") data.
 
 
-### This is a work in progress.
-
-There is support for quite a few languages (the same as Ruby's Faker), definitely they need some testing though:
+Works with many languages and locales (the same as Ruby's Faker) so your fake data will be relevant to your location.
 
 ```
 In [1]: from pyfaker import Fake
@@ -45,13 +43,12 @@ In [14]: fake_gb.PhoneNumber.formats()
 Out[14]: u'01662 12756'
 
 ```
-*all of this is generated from the faker gems yamls.*
+*all of this is generated from the faker gem's yamls.*
 
 
 
 ####Next up:
 
 - python 3 support (!)
-- a few bugs need fixing: `.Title`, updating base language with local one isn't quite working fully and something when calling `Name.name` in `fr` (sometimes).
-- make decorator version
-- guess how to gake based on variable names
+- make decorator (?)
+- guess what to fake based on names

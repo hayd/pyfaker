@@ -54,7 +54,7 @@ class Fake(BaseFake):
                             raise NotImplementedError
                     def sub_topics():
                         pass
-                    sub_topics.__dict__ = topic_dict
+                    sub_topics.__dict__ = sub_topic_dict
                     sub_topics.__name__ = SubTopic
                     topic_dict[SubTopic] = sub_topics
                 else:

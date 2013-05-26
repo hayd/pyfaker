@@ -1,6 +1,9 @@
+A libary for generating pseudo-random (but "realistic") data in python, using existing language support of the Ruby faker gem.
+
+
 ### This is a work in progress.
 
-Currently only the English (from en.yml) is used:
+There is support for quite a few languages (the same as Ruby's Faker), definitely they need some testing though:
 
 ```
 In [1]: from pyfaker import Fake
@@ -13,39 +16,42 @@ Out[3]: u'72449 Ward Shore'
 In [4]: fake.Address.street_address()
 Out[4]: u'7954 Waelchi Mall'
 
-In [5]: f.Company.bs()
+In [5]: fake.Company.bs()
 Out[5]: u'whiteboard visionary markets'
 
-In [6]: f.Company.bs()
+In [6]: fake.Company.bs()
 Out[6]: u'exploit innovative paradigms'
 
-In [7]: f.Name.name()
+In [7]: fake.Name.name()
 Out[7]: u'Aaliyah Bauch'
 
-In [8]: f.Name.name()
+In [8]: fake.Name.name()
 Out[8]: u"Chad O'Keefe"
+
+In [9]: fake_de = Fake('de')
+
+In [10]: fake_de.Address.street_address()
+Out[10]: u'Imbacher Weg 471'
+
+In [11]: fake_de.Address.city()
+Out[11]: u'Schreiberdorf'
+
+In [12]: fake_gb = Fake('en-gb')
+
+In [13]: fake_gb.PhoneNumber.formats()
+Out[13]: u'0800 906569'
+
+In [14]: fake_gb.PhoneNumber.formats()
+Out[14]: u'01662 12756'
+
 ```
-*all of this is generated from the yamls.*
+*all of this is generated from the faker gems yamls.*
 
-####Why:
 
-1. to port to python the (amazing) faker ruby gem and its fantastic language support and bring this to python (and do so in a dynamic way, in the sense that we can get benefit from updates when this is updated just by using their yml files).
-2. For me to learn about metaclasses and stuff... I've now recoded in a saner way.
-
-####Game plan:
-
-1. Scrape yamls from ruby gem faker (not important, can just copy for the moment)
-2. ~~From yamls extract json also removing `#{foo.bar}` ruby syntax with lovely `{Foo.bar}`~~
-3. ~~From json extract classes using metaclasses (whoop!)~~
-4. ~~Formatter to string substitute `{Foo.bar}` with `Foo.bar()`~~
-5. ~~Import classes when importing the module as one would expect.~~ Just import `Fake` class.
-6. Decide how to use these: as decorators? or an optional `fake` flag? Not sure.
-7. Use seed with random, I suspect it could be useful and easy.
-8. Testing, ~~even just checking the methods are callable is pretty useful~~. Support for python 2.6+ and 3.
-9. "Guess how to fake" (given variable name (?), which is it most likely to be)
-10. ? 
 
 ####Next up:
 
-- add in all the other languages (and cross fingers)
-- ...
+- python 3 support (!)
+- a few bugs need fixing: `.Title`, updating base language with local one isn't quite working fully and something when calling `Name.name` in `fr` (sometimes).
+- make decorator version
+- guess how to gake based on variable names

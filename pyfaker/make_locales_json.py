@@ -5,7 +5,7 @@ import os
 import re
 
 
-langs = ['en', 'en-gb']
+langs = ['de-ch', 'en-bork', 'en-ind', 'fr', 'pl', 'de', 'en-ca', 'en-us', 'nl', 'pt-br', 'en-au', 'en-gb', 'en', 'no-nb', 'vi']
 
 # in future this should scrape them from the ruby faker site without needing to copy them
 # we'll want to iterate through them but for now we'll just open en.yml

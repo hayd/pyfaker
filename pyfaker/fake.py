@@ -9,10 +9,17 @@ xeger = Xeger().xeger
 
 class Fake(BaseFake):
     def __init__(self, lang_code='en'):
-        #main_lang = lang_code.split('-')[0]
-        self._locale = all_locales[lang_code]['faker']
-        # TODO update with other locale e.g. en-ca
-        #self._locale = update_loc(self._locale, all_locales[main_lang]['faker'])
+        main_lang = lang_code.split('-')[0]
+        if main_lang in all_locales:
+            self._locale = all_locales[main_lang]['faker'].copy()
+            # update with other locale e.g. en-ca
+            # TODO this may have to be a recursive update (don't overwrite nested)
+            self._locale.update(all_locales[lang_code]['faker'])
+        else:
+            try:
+                self._locale = all_locales[lang_code]['faker']
+            except (KeyError,):
+                raise KeyError("lang-code '%s' is either not supported or not recognised.")
 
         self._methods = {}
         for topic, methods in self._locale.items():

@@ -40,7 +40,7 @@ class Fake(BaseFake):
                             self._methods.update([(m, choice), (
                                 '.'.join([Topic, SubTopic, m]), choice)])
                         else:
-                            print type(m)
+                            raise NotImplementedError
                             # print data.items()[0]
                         #    assert False, (m, ('.'.join([Topic, SubTopic, m]))
 
@@ -50,7 +50,7 @@ class Fake(BaseFake):
                     sub_topics.__name__ = SubTopic
                     topic_dict[SubTopic] = sub_topics
                 else:
-                    print type(data)
+                    raise NotImplementedError
 
             def topics():
                 pass  # TODO actually use a proper topics class

@@ -41,7 +41,7 @@ def get_locales():
     fpath = os.path.join(curpath(), 'locales.json')
     with open(fpath, 'r') as f:
         return json.load(f)
-_all_locales = _all_locales = get_locales()
+_all_locales = get_locales()
 
 
 def to_camel(s):

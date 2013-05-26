@@ -4,7 +4,7 @@ from pyfaker import Fake
 # list of tuples descibing location of all methods (have this from
 # fake._methods)
 
-langs = ['en']
+langs = ['en', 'en-gb']
 
 
 class TestFakeCallable(unittest.TestCase):

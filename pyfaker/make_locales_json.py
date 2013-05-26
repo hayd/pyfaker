@@ -2,12 +2,24 @@ import yaml
 import hashlib
 import json
 import os
-from pyfaker.utils import unruby
+import re
 
-lang = 'en'
+
+langs = ['en', 'en-gb']
 
 # in future this should scrape them from the ruby faker site without needing to copy them
 # we'll want to iterate through them but for now we'll just open en.yml
+
+
+def unruby(json_):
+    if isinstance(json_, basestring):
+        # TODO replace all #{foo_bar.baz} with {FooBar.baz}, may not be needed
+        return re.sub('#({[^}]*})', r'\1', json_)
+    if isinstance(json_, list):
+        return map(unruby, json_)
+    if isinstance(json_, dict):
+        return dict((k, unruby(v)) for k, v in json_.items())
+    return json_
 
 
 def _curpath():
@@ -18,7 +30,7 @@ def _curpath():
 def get_yaml(lang='en'):
     yml_dict = {}
     fpath = os.path.join(_curpath(), 'locales/%s.yml' % lang)
-    with open('locales/%s.yml' % lang, 'r') as f:
+    with open(fpath, 'r') as f:
         f_yml = yaml.load(f)
         f_yml[lang]['_md5'] = hashlib.md5(f.read()).hexdigest()
         yml_dict.update(f_yml)
@@ -26,8 +38,12 @@ def get_yaml(lang='en'):
 
 # TODO iterate over all yamls (and update the dict)
 
-_locales = unruby(get_yml('en'))
-
-fpath = os.path.join(curpath(), 'locales.json')
-with open('locales.json', 'w') as f:
-    json.dump(_locales, f)
+def save_json(langs):
+    locales = {}
+    for lang in langs:
+        loc = unruby(get_yaml(lang))
+        locales.update(loc)
+    fpath = os.path.join(_curpath(), 'locales.json')
+    with open(fpath, 'w') as f:
+        json.dump(locales, f)
+save_json(langs)

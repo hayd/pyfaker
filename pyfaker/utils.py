@@ -44,17 +44,6 @@ def get_locales():
 _all_locales = _all_locales = get_locales()
 
 
-def unruby(json_):
-    if isinstance(json_, basestring):
-        # TODO replace all #{foo_bar.baz} with {FooBar.baz}, may not be needed
-        return re.sub('#({[^}]*})', r'\1', json_)
-    if isinstance(json_, list):
-        return map(unruby, json_)
-    if isinstance(json_, dict):
-        return dict((k, unruby(v)) for k, v in json_.items())
-    return json_
-
-
 def to_camel(s):
     """returns string to camel caps
 
@@ -66,6 +55,9 @@ def to_camel(s):
     except Exception:  # TODO specify which kind of error
         raise ValueError(
             "%s doesn't convert to a good string for a class name" % s)
+
+def update_loc(loc1, loc2):
+    loc1.update(loc2)
 
 '''
 def format_(s, current, fake_=None):

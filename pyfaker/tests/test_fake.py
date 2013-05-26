@@ -34,6 +34,6 @@ def make_t(lang_code):
             func()  # TODO give more feedback of which is failing
     test_callable.__name__ = 'test_%s' % lang_code
     return test_callable
-kls_dict.update({'test_%s' % lang_code: make_t(lang_code) for lang_code in langs})
+kls_dict.update(('test_%s' % lang_code, make_t(lang_code)) for lang_code in langs)
 
 Test_Fake_Methods_Callable = type('Test_Fake_Methods_Callable', (unittest.TestCase,), kls_dict)

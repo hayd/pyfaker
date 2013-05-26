@@ -14,14 +14,15 @@ def _curpath():
     pth, _ = os.path.split(os.path.abspath(__file__))
     return pth
 
+
 def get_yaml(lang='en'):
-	yml_dict = {}
-	fpath = os.path.join(_curpath(), 'locales/%s.yml' % lang)
-	with open('locales/%s.yml' % lang, 'r') as f:
-	    f_yml = yaml.load(f)
-	    f_yml[lang]['_md5'] = hashlib.md5(f.read()).hexdigest()
-	    yml_dict.update(f_yml)
-	return yml_dict
+    yml_dict = {}
+    fpath = os.path.join(_curpath(), 'locales/%s.yml' % lang)
+    with open('locales/%s.yml' % lang, 'r') as f:
+        f_yml = yaml.load(f)
+        f_yml[lang]['_md5'] = hashlib.md5(f.read()).hexdigest()
+        yml_dict.update(f_yml)
+    return yml_dict
 
 # TODO iterate over all yamls (and update the dict)
 

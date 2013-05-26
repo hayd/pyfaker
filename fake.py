@@ -1,78 +1,68 @@
-import json
 import random
-import os
 import re
-from utils import to_camel, format_
+from utils import to_camel, get_locales, BaseFake, call_fmt
 
 
-def _get_locales():
-    def curpath():
-        pth, _ = os.path.split(os.path.abspath(__file__))
-        return pth
-    fpath = os.path.join(curpath(), 'locales.json')
-    with open(fpath, 'r') as f:
-        return json.load(f)
-_all_locales = _get_locales()
-
-# Base class all classes inherit from this
-class BaseFake(object):
-    pass
+all_locales = get_locales()
 
 
-def _faker_factory(_loc=None, _where=''):
-    if _loc is None:
-        _loc = _locale
+class Fake(BaseFake):
+    def __init__(self, lang_code='en'):
+        self._locale = all_locales[lang_code]['faker']
+        # TODO update with other methods e.g. en-ca
+        self._methods = {}
+        for topic, methods in self._locale.items():
+            Topic = to_camel(topic)
+            topic_dict = {}
+            for method, data in methods.items():
+                if isinstance(data, list):
+                    # This bit is a little hacky
+                    if method == 'bs' or method == 'buzzwords':
+                        def choice(data=data, self=self):
+                            words = map(random.choice, data)
+                            return self._format(' '.join(words))
+                    else:
+                        def choice(data=data, self=self):
+                            return self._format(random.choice(data))
+                    topic_dict[method] = choice
+                    self._methods.update([(method, choice), (
+                        '.'.join([Topic, method]), choice)])
+                elif isinstance(data, dict):
+                    # TODO refactor
+                    sub_topic = method
+                    SubTopic = to_camel(sub_topic)
+                    sub_topic_dict = {}
+                    for m, d in data.items():
+                        if isinstance(d, list):
+                            def choice(d=d, self=self):
+                                return self._format(random.choice(d))
+                            sub_topic_dict[m] = choice
+                            self._methods.update([(m, choice), (
+                                '.'.join([Topic, SubTopic, m]), choice)])
+                        else:
+                            print type(m)
+                            # print data.items()[0]
+                        #    assert False, (m, ('.'.join([Topic, SubTopic, m]))
 
-    if isinstance(_loc, list):
-        if all(isinstance(s, basestring) for s in _loc):
-            # then method
-            # TODO is the all above necessary? Maybe any would do?
+                    def sub_topics():
+                        pass
+                    sub_topics.__dict__ = topic_dict
+                    sub_topics.__name__ = SubTopic
+                    topic_dict[SubTopic] = sub_topics
+                else:
+                    print type(data)
 
-            # dict(dir(_where), **locals()) how to get it?
-            @classmethod
-            def choice_(cls):
-                return format_(random.choice(_loc), current=cls)
-            return choice_
-        else:
-            # it's a class
-            assert(not any(isinstance(s, basestring) for s in _loc))
-            # fingers crossed
-            if all(isinstance(s, list) for s in _loc):
-                # I'm assuming everything in each list is a string... why wouldn't it be?
-                # I'm just going to arbitrarily use space here
-                @classmethod
-                def choice_(cls):
-                    return format_(' '.join(map(random.choice, L) for L in _loc), current=cls)
-                return choice_
-            else:  # pragma: no cover
-                assert False  # let's hope not
+            def topics():
+                pass  # TODO actually use a proper topics class
+            topics.__dict__ = topic_dict
+            topics.__name__ = Topic
+            self.__dict__[Topic] = topics
 
-    elif isinstance(_loc, dict):
-        klass_names = _loc.keys()
-        klasses = {}
-        for kname in klass_names:
-            if isinstance(_loc[kname], list):
-                # then possibly method
-                klasses[kname] = _faker_factory(_loc[
-                                                kname], _where='%s.%s' % (_where, kname))
-            else:
-                # then dictionary and definitely a class
-                klassy_name = to_camel(kname)
-                # it jolly well ought to be a dict
-                assert(isinstance(_loc[kname], dict))
-                ty_dict = dict((k, _faker_factory(_loc=v, _where='%s.%s' % (_where, kname)))
-                               for k, v in _loc[kname].items())
-                klasses[klassy_name] = type(klassy_name, (BaseFake,), ty_dict)
-        return klasses
-
-def _init_fake(self, lang_code='en'):
-    lang, sublang = lang_code.split() if '-' in lang_code else lang_code, None
-    _locale = _all_locales[lang]['faker']
-    if sublang:  # TODO check this is actually the way it's done
-        _locale.update(json.load(f)[lang_code]['faker'])
-    self.__dict__.update(_faker_factory(_locale))
-Fake = type('Fake', (BaseFake,), {'__init__': _init_fake})
-
-
-# Apparently the below is naughty, and I should be overwriting string.Formatter
-#.format(dict(dir(classname), **locals()))
+    def _format(self, s):
+        # replace #s with digits
+        def callback(matchobj):
+            return '%s' % random.randrange(10)
+        s = re.sub(r'#', callback, s)
+        # replace {Name.foo} etc.
+        s = call_fmt.format(s, **dict(self.__dict__, **self._methods))
+        return s

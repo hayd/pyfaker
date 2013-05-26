@@ -1,38 +1,27 @@
 import unittest
 from pyfaker import Fake
 
+# list of tuples descibing location of all methods (have this from
+# fake._methods)
+
 langs = ['en']
-all_fakes = {lang_code: Fake(lang_code=lang_code) for lang_code in langs}
-
-# list of tuples descibing location of all methods
-all_methods = [('Lorem', 'supplemental'), ('Lorem', 'words')]
-# TODO actually generate all_methods
-
-def get_method(self, fake, where):
-	for i in where:
-		fake = fake.__dict__[i]
-	def method(self):
-		return fake
-	return method
 
 
-def tmc_t_name(lang_code, where):
-	return 'test_' + lang_code + '_' + '_'.join(where)
-def tmc_t(lang_code, where):
-	fake = all_fakes[lang_code]
-	def _t(self):
-		self.method = get_method(self, fake, where)
-		self.method()  # we shouldn't raise here
-	_t.func_name = tmc_t_name(lang_code, where)
-	_t.func_doc = 'Test whether %s can be called (with 0 arguments)' % '.'.join(where)
-	return _t
+class TestFakeCallable(unittest.TestCase):
+    def setUp(self):
+        self.fake = Fake()
 
+    def test_callable(self):
+        for method, func in self.fake._methods.items():
+            func()
 
-tmc_dict = {tmc_t_name(lang_code, where): tmc_t(lang_code, where)
-			for lang_code in langs
-			for where in all_methods}
-print tmc_dict
+    def test_at_least(self):
+        old_methods = [
+            'Address.street_name', 'Address.building_number', 'Name.prefix', 'last_name', 'Company.suffix', 'Name.name', 'Address.street_suffix', 'street_name', 'Company.name', 'Lorem.supplemental', 'Internet.domain_suffix', 'Address.street_address', 'prefix', 'Address.state_abbr', 'postcode', 'Company.buzzwords', 'city_prefix', 'Address.secondary_address', 'Name.suffix', 'suffix', 'city', 'first_name', 'buzzwords', 'free_email', 'Address.city_suffix', 'street_suffix', 'Address.time_zone', 'Name.Title.level',
+            'state', 'Name.Title.descriptor', 'domain_suffix', 'PhoneNumber.formats', 'Name.first_name', 'Address.country', 'Lorem.words', 'Address.city', 'secondary_address', 'Address.default_country', 'Name.last_name', 'job', 'default_country', 'state_abbr', 'words', 'bs', 'city_suffix', 'Address.postcode', 'supplemental', 'Internet.free_email', 'name', 'level', 'country', 'time_zone', 'building_number', 'Name.Title.job', 'descriptor', 'Company.bs', 'formats', 'Address.state', 'Address.city_prefix', 'street_address']
+        self.assert_(len(old_methods) <= len(self.fake._methods))
 
-TestMethodsCallable = type('TestMethodsCallable', (unittest.TestCase,), tmc_dict)
-
-# klasses[klassy_name] = type(klassy_name, (BaseFake,), ty_dict)
+'''
+for l in langs:
+    class Test
+    '''

@@ -56,6 +56,7 @@ def to_camel(s):
         raise ValueError(
             "%s doesn't convert to a good string for a class name" % s)
 
+
 def update_loc(loc1, loc2):
     loc1.update(loc2)
 

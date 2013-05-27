@@ -5,7 +5,8 @@ import os
 import re
 
 
-langs = ['de-ch', 'en-bork', 'en-ind', 'fr', 'pl', 'de', 'en-ca', 'en-us', 'nl', 'pt-br', 'en-au', 'en-gb', 'en', 'no-nb', 'vi']
+langs = ['de-ch', 'en-bork', 'en-ind', 'fr', 'pl', 'de', 'en-ca',
+         'en-us', 'nl', 'pt-br', 'en-au', 'en-gb', 'en', 'no-nb', 'vi']
 
 # in future this should scrape them from the ruby faker site without needing to copy them
 # we'll want to iterate through them but for now we'll just open en.yml
@@ -37,6 +38,7 @@ def get_yaml(lang='en'):
     return yml_dict
 
 # TODO iterate over all yamls (and update the dict)
+
 
 def save_json(langs):
     locales = {}

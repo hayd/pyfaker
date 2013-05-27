@@ -7,19 +7,22 @@ from pyfaker.xeger import Xeger
 all_locales = get_locales()
 xeger = Xeger().xeger
 
+
 class Fake(BaseFake):
     def __init__(self, lang_code='en'):
         main_lang = lang_code.split('-')[0]
         if main_lang in all_locales:
             self._locale = all_locales[main_lang]['faker'].copy()
             # update with other locale e.g. en-ca
-            # TODO this may have to be a recursive update (don't overwrite nested)
+            # TODO this may have to be a recursive update (don't overwrite
+            # nested)
             self._locale.update(all_locales[lang_code]['faker'])
         else:
             try:
                 self._locale = all_locales[lang_code]['faker']
             except (KeyError,):
-                raise KeyError("lang-code '%s' is either not supported or not recognised.")
+                raise KeyError(
+                    "lang-code '%s' is either not supported or not recognised.")
 
         self._methods = {}
         for topic, methods in self._locale.items():
@@ -52,6 +55,7 @@ class Fake(BaseFake):
                                 '.'.join([Topic, SubTopic, m]), choice)])
                         else:
                             raise NotImplementedError
+
                     def sub_topics():
                         pass
                     sub_topics.__dict__ = sub_topic_dict
@@ -59,12 +63,12 @@ class Fake(BaseFake):
                     topic_dict[SubTopic] = sub_topics
                 else:
                     # This bit is a little hacky
-                    if method == 'postcode': # then it's a regex
+                    if method == 'postcode':  # then it's a regex
                         def choice(self=self, data=data):
                             return xeger(data[1:-1])
                         topic_dict[method] = choice
                         self._methods.update([(method, choice), (
-                        '.'.join([Topic, method]), choice)])
+                                              '.'.join([Topic, method]), choice)])
                     else:
                         raise NotImplementedError
 

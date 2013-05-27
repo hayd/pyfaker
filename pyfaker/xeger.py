@@ -9,13 +9,14 @@ import sys
 if sys.version_info[0] >= 3:
     unichr = chr
 
-#The * and + characters in a regular expression
+# The * and + characters in a regular expression
 # match up to any number of repeats in theory,
 #(and actually 65535 repeats in python) but you
-#probably don't want that many repeats in your
-#generated strings. This sets an upper-bound on
-#repeats generated from + and * characters.
+# probably don't want that many repeats in your
+# generated strings. This sets an upper-bound on
+# repeats generated from + and * characters.
 STAR_PLUS_LIMIT = 100
+
 
 class Xeger(object):
     """Inspired by the Java library Xeger: http://code.google.com/p/xeger/
@@ -32,25 +33,25 @@ class Xeger(object):
             "category_not_space": lambda: self._alphabets['nonwhitespace'],
             "category_word": lambda: self._alphabets['word'],
             "category_not_word": lambda: self._alphabets['nonword'],
-                  }
+        }
 
         self._cases = {"literal": lambda x: unichr(x),
-             "not_literal": lambda x: choice(
-                                string.printable.replace(unichr(x), '')),
-             "at": lambda x: '',
-             "in": lambda x: self._handle_in(x),
-             "any": lambda x: self.printable(1),
-             "range": lambda x: [unichr(i) for i in range(x[0], x[1]+1)],
-             "category": lambda x: self._categories[x](),
-             'branch': lambda x: ''.join(self._handle_state(i) for
-                                                            i in choice(x[1])),
-             "subpattern": lambda x: self._handle_group(x),
-             "assert": lambda x: ''.join(self._handle_state(i) for i in x[1]),
-             "assert_not": lambda x: '',
-             "groupref": lambda x: self._cache[x],
-             'max_repeat': lambda x: self._handle_repeat(*x),
-             'negate': lambda x: [False],
-             }
+                       "not_literal": lambda x: choice(
+                           string.printable.replace(unichr(x), '')),
+                       "at": lambda x: '',
+                       "in": lambda x: self._handle_in(x),
+                       "any": lambda x: self.printable(1),
+                       "range": lambda x: [unichr(i) for i in range(x[0], x[1]+1)],
+                       "category": lambda x: self._categories[x](),
+                       'branch': lambda x: ''.join(self._handle_state(i) for
+                                                   i in choice(x[1])),
+                       "subpattern": lambda x: self._handle_group(x),
+                       "assert": lambda x: ''.join(self._handle_state(i) for i in x[1]),
+                       "assert_not": lambda x: '',
+                       "groupref": lambda x: self._cache[x],
+                       'max_repeat': lambda x: self._handle_repeat(*x),
+                       'negate': lambda x: [False],
+                       }
 
     def xeger(self, string_or_regex):
         try:
@@ -81,7 +82,7 @@ class Xeger(object):
 
     def _handle_in(self, value):
         candidates = list(chain(*(self._handle_state(i) for
-                                                     i in value)))
+                                  i in value)))
         if candidates[0] is False:
             candidates = set(string.printable).difference(candidates[1:])
             return choice(list(candidates))

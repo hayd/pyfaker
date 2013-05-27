@@ -65,9 +65,6 @@ class Fake(BaseFake):
                                 '.'.join([Topic, SubTopic, m]), choice)])
                         else:
                             raise NotImplementedError
-
-                    def sub_topics():
-                        pass
                     sub_topics = BaseFakeTopic(
                         name=SubTopic, topic_dict=sub_topic_dict)
                     topic_dict[SubTopic] = sub_topics
@@ -84,10 +81,6 @@ class Fake(BaseFake):
 
             topics = BaseFakeTopic(name=Topic, topic_dict=topic_dict)
             self.__dict__[Topic] = topics
-
-            # Hopefully can do this a the top
-            # update with more locale e.g. gb-ca
-            # self._sub_locale = all_locales[lang_code]['faker']
 
     def _format(self, s):
         # replace #s with digits

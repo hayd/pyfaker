@@ -1,11 +1,21 @@
 import random
 import re
-from pyfaker.utils import to_camel, get_locales, BaseFake, call_fmt
+from pyfaker.utils import to_camel, get_locales, call_fmt
 from pyfaker.xeger import Xeger
 
 
 all_locales = get_locales()
 xeger = Xeger().xeger
+
+
+class BaseFake(object):
+    pass
+
+
+class BaseFakeTopic(object):
+    def __init__(self, name, topic_dict):
+        self.__dict__ = topic_dict
+        self.__name__ = name
 
 
 class Fake(BaseFake):
@@ -32,11 +42,11 @@ class Fake(BaseFake):
                 if isinstance(data, list):
                     # This bit is a little hacky
                     if method == 'bs' or method == 'buzzwords':
-                        def choice(data=data, self=self):
+                        def choice(self=self, data=data):
                             words = map(random.choice, data)
                             return self._format(' '.join(words))
                     else:
-                        def choice(data=data, self=self):
+                        def choice(self=self, data=data):
                             return self._format(random.choice(data))
                     topic_dict[method] = choice
                     self._methods.update([(method, choice), (
@@ -48,7 +58,7 @@ class Fake(BaseFake):
                     sub_topic_dict = {}
                     for m, d in data.items():
                         if isinstance(d, list):
-                            def choice(d=d, self=self):
+                            def choice(self=self, d=d):
                                 return self._format(random.choice(d))
                             sub_topic_dict[m] = choice
                             self._methods.update([(m, choice), (
@@ -58,8 +68,8 @@ class Fake(BaseFake):
 
                     def sub_topics():
                         pass
-                    sub_topics.__dict__ = sub_topic_dict
-                    sub_topics.__name__ = SubTopic
+                    sub_topics = BaseFakeTopic(
+                        name=SubTopic, topic_dict=sub_topic_dict)
                     topic_dict[SubTopic] = sub_topics
                 else:
                     # This bit is a little hacky
@@ -72,10 +82,7 @@ class Fake(BaseFake):
                     else:
                         raise NotImplementedError
 
-            def topics():
-                pass  # TODO actually use a proper topics class
-            topics.__dict__ = topic_dict
-            topics.__name__ = Topic
+            topics = BaseFakeTopic(name=Topic, topic_dict=topic_dict)
             self.__dict__[Topic] = topics
 
             # Hopefully can do this a the top

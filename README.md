@@ -49,6 +49,6 @@ Out[14]: u'01662 12756'
 
 ####Next up:
 
-- python 3 support (!)
-- make decorator (?)
+- ~~python 3 support (!)~~
+- make decorator (?) or apply to classes?
 - guess what to fake based on names

@@ -4,6 +4,10 @@ import re
 import string
 from random import choice, randint
 from itertools import chain
+import sys
+
+if sys.version_info[0] >= 3:
+    unichr = chr
 
 #The * and + characters in a regular expression
 # match up to any number of repeats in theory,
@@ -36,7 +40,7 @@ class Xeger(object):
              "at": lambda x: '',
              "in": lambda x: self._handle_in(x),
              "any": lambda x: self.printable(1),
-             "range": lambda x: [unichr(i) for i in xrange(x[0], x[1]+1)],
+             "range": lambda x: [unichr(i) for i in range(x[0], x[1]+1)],
              "category": lambda x: self._categories[x](),
              'branch': lambda x: ''.join(self._handle_state(i) for
                                                             i in choice(x[1])),
@@ -88,6 +92,6 @@ class Xeger(object):
         result = []
         end_range = min((end_range, STAR_PLUS_LIMIT))
         times = randint(start_range, end_range)
-        for i in xrange(times):
+        for i in range(times):
             result.append(''.join(self._handle_state(i) for i in value))
         return ''.join(result)

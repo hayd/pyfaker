@@ -51,7 +51,7 @@ def to_camel(s):
     to_camel('foo_bar') == 'FooBar'
     """
     try:
-        return s.title().replace('_', '')  # assume the titles are ascii, else class name fail
+        return str(s.title().replace('_', ''))  # assume the titles are ascii, else class name fail
     except Exception:  # TODO specify which kind of error
         raise ValueError(
             "%s doesn't convert to a good string for a class name" % s)

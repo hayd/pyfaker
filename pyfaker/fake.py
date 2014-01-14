@@ -3,9 +3,13 @@ import re
 from pyfaker.utils import to_camel, get_locales, call_fmt
 from pyfaker.xeger import Xeger
 
-
-all_locales = get_locales()
 xeger = Xeger().xeger
+
+# JSON of all locale words
+all_locales = get_locales()
+
+# available languages
+LANGS = list(all_locales.keys())
 
 
 class BaseFake(object):
@@ -32,7 +36,8 @@ class Fake(BaseFake):
                 self._locale = all_locales[lang_code]['faker']
             except (KeyError,):
                 raise KeyError(
-                    "lang-code '%s' is either not supported or not recognised.")
+                    "lang-code '%s' is either not supported or not recognised."
+                    )
 
         self._methods = {}
         for topic, methods in self._locale.items():
@@ -74,8 +79,10 @@ class Fake(BaseFake):
                         def choice(self=self, data=data):
                             return xeger(data[1:-1])
                         topic_dict[method] = choice
-                        self._methods.update([(method, choice), (
-                                              '.'.join([Topic, method]), choice)])
+                        self._methods.update([(method,
+                                               choice),
+                                              ('.'.join([Topic, method]),
+                                               choice)])
                     else:
                         raise NotImplementedError
 

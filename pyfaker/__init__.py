@@ -1,3 +1,3 @@
-from pyfaker.fake import Fake
+from pyfaker.fake import Fake, LANGS
 
-__all__ = ['Fake']
+__all__ = ['Fake', 'LANGS']

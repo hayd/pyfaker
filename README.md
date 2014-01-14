@@ -8,7 +8,7 @@ The easiest way is to install via [pip](http://www.pip-installer.org/en/latest/i
 
 ### Usage
 
-Works with many languages and locales (the same as Ruby's Faker) so your fake data will be relevant to your location.
+Works with many languages and locales (the same as [Ruby's Faker](http://faker.rubyforge.org/)) so your fake data will be relevant to your location.
 
 ```
 In [1]: from pyfaker import Fake
@@ -52,9 +52,42 @@ Out[14]: u'01662 12756'
 ```
 *all of this is generated from the faker gem's yamls.*
 
+The languages, which may have different levels of support:
+
+```
+In [14]: from pyfaker import LANGS
+
+In [15]: print LANGS
+[u'en-gb', u'fr', u'en-us', u'nl', u'vi', u'de', u'de-ch', u'en-ind', u'en-au', u'en', u'pt-br', u'en-bork', u'en-ca', u'pl', u'no-nb'
+```
+
+*Here, `en-gb` denotes British English, etc.*
+
+### Creating random classes
+
+One way is to put the instance of Fake as a default argument to `__init__`, this means that it's only created once (when it's defined):
+
+```
+class Person:
+    def __init__(self, fake=Fake()):
+        self.name = fake.Name.name()
+        self.phone_number = fake.PhoneNumber.formats()
+
+p = Person()
+
+# access the attributes
+p.name
+p.phone_number
+```
+
+### Bugs / Features
+
+Please [create a github issue](https://github.com/hayd/pyfaker/issues), if *you* can fix whatever it: pull-requests are much appreciated! :)
 
 ####Next up:
 
 - more sentences and other standard random things
 - make decorator (?) or apply to classes?
 - guess what to fake based on names
+
+[![Build Status](https://travis-ci.org/hayd/pyfaker.png?branch=master)](https://travis-ci.org/hayd/pyfaker)

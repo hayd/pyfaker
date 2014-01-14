@@ -1,0 +1,16 @@
+README
+setup.cfg
+setup.py
+pyfaker/__init__.py
+pyfaker/fake.py
+pyfaker/locales.json
+pyfaker/make_locales_json.py
+pyfaker/utils.py
+pyfaker/xeger.py
+pyfaker.egg-info/PKG-INFO
+pyfaker.egg-info/SOURCES.txt
+pyfaker.egg-info/dependency_links.txt
+pyfaker.egg-info/entry_points.txt
+pyfaker.egg-info/not-zip-safe
+pyfaker.egg-info/requires.txt
+pyfaker.egg-info/top_level.txt

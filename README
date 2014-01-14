@@ -1,4 +1,4 @@
-A python libary for generating pseudo-random (but "realistic") data.
+A python library for generating pseudo-random (but "realistic") data.
 
 
 Works with many languages and locales (the same as Ruby's Faker) so your fake data will be relevant to your location.

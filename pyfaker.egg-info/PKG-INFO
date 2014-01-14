@@ -1,0 +1,11 @@
+Metadata-Version: 1.0
+Name: pyfaker
+Version: 0.1dev
+Summary: Create pseudo-random fake data, supports several of languages.
+Home-page: https://github.com/hayd/pyfaker
+Author: Andy Hayden
+Author-email: andyhayden1@gmail.com
+License: MIT
+Description: A libary for generating pseudo-random (but "realistic") data in python. A port of the faker gem to python (making use of its rich locale support).
+Keywords: fake language testing data generation
+Platform: UNKNOWN

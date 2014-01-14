@@ -1,5 +1,12 @@
 A python library for generating pseudo-random (but "realistic") data.
 
+### How to install
+
+The easiest way is to install via [pip](http://www.pip-installer.org/en/latest/installing.html):
+
+    pip install pyfaker
+
+### Usage
 
 Works with many languages and locales (the same as Ruby's Faker) so your fake data will be relevant to your location.
 
@@ -46,9 +53,8 @@ Out[14]: u'01662 12756'
 *all of this is generated from the faker gem's yamls.*
 
 
-
 ####Next up:
 
-- ~~python 3 support (!)~~
+- more sentences and other standard random things
 - make decorator (?) or apply to classes?
 - guess what to fake based on names

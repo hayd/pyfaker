@@ -1,4 +1,6 @@
-.pyc
+*.pyc
 __pycache__
 build
 dist
+pyfaker.egg-info
+setup.cfg

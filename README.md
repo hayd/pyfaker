@@ -1,5 +1,7 @@
 A python library for generating pseudo-random (but "realistic") data.
 
+[![Build Status](https://travis-ci.org/hayd/pyfaker.svg?branch=master)](https://travis-ci.org/hayd/pyfaker)
+
 ### How to install
 
 The easiest way is to install via [pip](http://www.pip-installer.org/en/latest/installing.html):
@@ -89,5 +91,3 @@ Please [create a github issue](https://github.com/hayd/pyfaker/issues), if *you*
 - more sentences and other standard random things
 - make decorator (?) or apply to classes?
 - guess what to fake based on names
-
-[![Build Status](https://travis-ci.org/hayd/pyfaker.png?branch=master)](https://travis-ci.org/hayd/pyfaker)

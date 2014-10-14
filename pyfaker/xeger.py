@@ -19,6 +19,7 @@ STAR_PLUS_LIMIT = 100
 
 
 class Xeger(object):
+
     """Inspired by the Java library Xeger: http://code.google.com/p/xeger/
     This class adds functionality to Rstr allowing users to generate a
     semi-random string from a regular expression."""
@@ -41,7 +42,7 @@ class Xeger(object):
                        "at": lambda x: '',
                        "in": lambda x: self._handle_in(x),
                        "any": lambda x: self.printable(1),
-                       "range": lambda x: [unichr(i) for i in range(x[0], x[1]+1)],
+                       "range": lambda x: [unichr(i) for i in range(x[0], x[1] + 1)],
                        "category": lambda x: self._categories[x](),
                        'branch': lambda x: ''.join(self._handle_state(i) for
                                                    i in choice(x[1])),

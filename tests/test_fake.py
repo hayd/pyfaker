@@ -9,6 +9,7 @@ langs = ['de-ch', 'en-bork', 'en-ind', 'pl', 'de', 'en-ca', 'fr',
 
 
 class TestFake(unittest.TestCase):
+
     def setUp(self):
         self.fake = Fake()
 
@@ -29,13 +30,14 @@ for lang_code in langs:
     for method, func in all_fakes[lang_code]._methods.items():
         if '.' in method:
             method = method.replace('.', '_')
+
             def test_callable(self=None, func=func):
                 for i in rng:
                     func()
             test_name = 'test_%s_%s' % (lang_code.replace('-', '_'), method)
             test_callable.__name__ = str(test_name)
             kls_dict[test_name] = test_callable
-        if lang_code=='vi' and method=='lorem_words':
+        if lang_code == 'vi' and method == 'lorem_words':
             BOO = test_callable
 
 

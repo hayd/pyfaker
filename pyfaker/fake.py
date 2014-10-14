@@ -17,12 +17,14 @@ class BaseFake(object):
 
 
 class BaseFakeTopic(object):
+
     def __init__(self, name, topic_dict):
         self.__dict__ = topic_dict
         self.__name__ = name
 
 
 class Fake(BaseFake):
+
     def __init__(self, lang_code='en'):
         main_lang = lang_code.split('-')[0]
         if main_lang in all_locales:
@@ -37,7 +39,7 @@ class Fake(BaseFake):
             except (KeyError,):
                 raise KeyError(
                     "lang-code '%s' is either not supported or not recognised."
-                    )
+                )
 
         self._methods = {}
         for topic, methods in self._locale.items():

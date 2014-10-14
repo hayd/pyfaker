@@ -6,6 +6,7 @@ from string import Formatter
 
 
 class CallFormatter(Formatter):
+
     def get_field(self, field_name, *args, **kwargs):
         obj, used_key = Formatter.get_field(self, field_name, *args, **kwargs)
         return obj(), used_key
@@ -23,10 +24,11 @@ def get_locales():
 
 
 def to_camel(s):
-    """returns string to camel caps
+    """returns string to camel caps.
 
     Example
     to_camel('foo_bar') == 'FooBar'
+
     """
     return str(s.title().replace('_', ''))
     # assume the titles are ascii, else class name fail

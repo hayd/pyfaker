@@ -1,7 +1,6 @@
-import re
-import random
-import os
+from collections import Mapping
 import json
+import os
 from string import Formatter
 
 
@@ -30,6 +29,19 @@ def to_camel(s):
     to_camel('foo_bar') == 'FooBar'
 
     """
-    return str(s.title().replace('_', ''))
     # assume the titles are ascii, else class name fail
     # "%s doesn't convert to a good string for a class name" % s)
+    return str(s.title().replace('_', ''))
+
+
+def recursive_update(d, u):
+    "Update dict d recursively with values from dict u."
+    for k, v in u.iteritems():
+        if isinstance(v, Mapping):
+            r = recursive_update(d.get(k, {}), v)
+            d[k] = r
+        elif isinstance(v, list):
+            d[k] = d.get(k, []) + v
+        else:
+            d[k] = u[k]
+    return d

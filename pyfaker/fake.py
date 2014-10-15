@@ -1,6 +1,8 @@
 import random
 import re
-from pyfaker.utils import to_camel, get_locales, call_fmt
+
+from pyfaker.api import ApiMixin
+from pyfaker.utils import to_camel, get_locales, call_fmt, recursive_update
 from pyfaker.xeger import Xeger
 
 xeger = Xeger().xeger
@@ -23,23 +25,20 @@ class BaseFakeTopic(object):
         self.__name__ = name
 
 
-class Fake(BaseFake):
+class Fake(BaseFake, ApiMixin):
 
     def __init__(self, lang_code='en'):
         main_lang = lang_code.split('-')[0]
-        if main_lang in all_locales:
-            self._locale = all_locales[main_lang]['faker'].copy()
-            # update with other locale e.g. en-ca
-            # TODO this may have to be a recursive update (don't overwrite
-            # nested)
-            self._locale.update(all_locales[lang_code]['faker'])
-        else:
-            try:
+        try:
+            if main_lang in all_locales:
+                self._locale = all_locales[main_lang]['faker'].copy()
+                recursive_update(self._locale, all_locales[lang_code]['faker'])
+            else:
                 self._locale = all_locales[lang_code]['faker']
-            except (KeyError,):
-                raise KeyError(
-                    "lang-code '%s' is either not supported or not recognised."
-                )
+        except KeyError:
+            raise KeyError(
+                "lang-code '%s' is either not supported or not recognised."
+            )
 
         self._methods = {}
         for topic, methods in self._locale.items():

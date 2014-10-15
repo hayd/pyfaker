@@ -36,7 +36,7 @@ def to_camel(s):
 
 def recursive_update(d, u):
     "Update dict d recursively with values from dict u."
-    for k, v in u.iteritems():
+    for k, v in u.items():
         if isinstance(v, Mapping):
             r = recursive_update(d.get(k, {}), v)
             d[k] = r

@@ -4,3 +4,4 @@ build
 dist
 pyfaker.egg-info
 setup.cfg
+.tox
